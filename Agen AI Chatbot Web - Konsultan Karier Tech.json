@@ -1,0 +1,99 @@
+{
+  "name": "Agen AI Chatbot Web - Konsultan Karier Tech",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c1111111-2222-3333-4444-555555555501",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        340
+      ],
+      "webhookId": "career-advisor-bot"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=Anda adalah 'Tech Career & Portfolio Advisor', seorang konsultan karier profesional di bidang teknologi (Software Engineering, Data Science, UI/UX, dan DevOps).\n\nTUGAS UTAMA:\n1. Membantu pengguna menyusun kurikulum belajar karier teknologi.\n2. Memberikan saran ide proyek nyata untuk penguatan portofolio kerja.\n3. Memberikan tips wawancara teknis dan optimasi CV/LinkedIn.\n\nPANDUAN KOMUNIKASI:\n- Sapa pengguna dengan ramah, suportif, dan terstruktur (gunakan bullet point bila menjelaskan langkah).\n- Manfaatkan riwayat percakapan sebelumnya untuk menjaga kesinambungan saran yang diberikan.\n- Jawab dalam Bahasa Indonesia yang komunikatif dan profesional."
+        }
+      },
+      "id": "c1111111-2222-3333-4444-555555555502",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        540,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-pro-latest",
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "c1111111-2222-3333-4444-555555555503",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 5
+      },
+      "id": "c1111111-2222-3333-4444-555555555504",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        140
+      ]
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}
